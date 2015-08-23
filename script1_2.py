@@ -221,6 +221,9 @@ def floatAddition (op1,op2):
 tccount=0	
 tcpassed=0
 tcfailed=0
+if not os.path.exists(r'c:\Python27\OpenTable\Results'): 
+	os.makedirs(r'c:\Python27\OpenTable\Results')
+
 
 ### Creating Result file for individual test iteration ###
 resultdir="Results\\"+str(datetime.datetime.now())
@@ -230,6 +233,9 @@ resultdir=resultdir.replace(":","-");
 fout=open(resultdir,"w");
 fout.close();
 #####################################################
+
+
+
 
 
 ##### Small integer number addition test #####	
