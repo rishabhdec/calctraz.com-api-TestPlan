@@ -6,6 +6,7 @@ import sys
 import datetime
 import re
 import string
+import os
 
 global resultdir
 global tcpassed
