@@ -306,7 +306,7 @@ fout=open(resultdir,"w");
 fout.close();
 #####################################################
 
-'''
+
 ##### Small integer number addition test #####	
 i=0;
 
@@ -598,7 +598,7 @@ for i in range(0,10):
 	tccount=tccount+1;
 	stringAddition(op1,op2,'answer');
 
-'''	
+
 	
 	
 ######## Multioperand Test without string as operand #########
