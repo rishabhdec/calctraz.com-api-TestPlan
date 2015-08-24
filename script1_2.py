@@ -12,6 +12,7 @@ global resultdir
 global tcpassed
 global tcfailed
 global tccount
+global tcexception
 
 def Report():
 	global tccount
@@ -27,6 +28,8 @@ def Report():
 	fout.write("\nTotal Test Cases Failed : "+str(tcfailed));
 	print "\nTotal Test Cases Failed : "+str(tcfailed)
 	fout.write("\n\n*****************************\n");
+	print "\nTotal Test Cases Exceptions : "+str(tcexception)
+	fout.write("\n\n*****************************\n");
 	print "\n\n*****************************\n"
 	fout.close();
 
@@ -38,6 +41,7 @@ def integerAddition (op1,op2):
 		global tccount
 		global tcpassed
 		global tcfailed
+		global tcexception
 		fout=open(resultdir,'a');
 		url="https://www.calcatraz.com/calculator/api?c="+str(op1)+"%2B"+str(op2);
 		getRequest=urllib2.urlopen(url);
@@ -80,6 +84,7 @@ def integerAddition (op1,op2):
 		fout.write(resultString);
 		fout.close();
 	except Exception as e:
+			tcexception=tcexception+1;
 			e = sys.exc_info();
 			resultString=str(op1)+"+"+str(op2)+":"+str(e)+":Failed\n";
 			print resultString;
@@ -92,6 +97,8 @@ def generalAddition(op1,op2,expected):
 		global tccount
 		global tcpassed
 		global tcfailed
+		global tcexception
+		
 		fout=open(resultdir,'a');
 		url="https://www.calcatraz.com/calculator/api?c="+str(op1)+"%2B"+str(op2);
 		getRequest=urllib2.urlopen(url);
@@ -131,6 +138,7 @@ def generalAddition(op1,op2,expected):
 		fout.write(resultString);
 		fout.close();
 	except Exception as e:
+			tcexception=tcexception+1;
 			e = sys.exc_info();
 			resultString=str(op1)+"+"+str(op2)+":"+str(e)+":Failed\n";
 			print resultString;
@@ -143,6 +151,8 @@ def stringAddition(op1,op2,expected):
 		global tccount
 		global tcpassed
 		global tcfailed
+		global tcexception
+		
 		fout=open(resultdir,'a');
 		url="https://www.calcatraz.com/calculator/api?c="+str(op1)+"%2B"+str(op2);
 		getRequest=urllib2.urlopen(url);
@@ -165,6 +175,7 @@ def stringAddition(op1,op2,expected):
 		fout.close();	
 	
 	except Exception as e:
+			tcexception=tcexception+1;
 			e = sys.exc_info();
 			resultString=str(op1)+"+"+str(op2)+":"+str(e)+":Failed\n";
 			print resultString;
@@ -177,6 +188,8 @@ def floatAddition (op1,op2):
 		global tccount
 		global tcpassed
 		global tcfailed
+		global tcexception
+		
 		fout=open(resultdir,'a');
 		url="https://www.calcatraz.com/calculator/api?c="+str(op1)+"%2B"+str(op2);
 		getRequest=urllib2.urlopen(url);
@@ -216,17 +229,70 @@ def floatAddition (op1,op2):
 		fout.write(resultString);
 		fout.close();
 	except Exception as e:
+			tcexception=tcexception+1;
 			e = sys.exc_info();
 			resultString=str(op1)+"+"+str(op2)+":"+str(e)+":Failed\n";
 			print resultString;
 			fout.write(resultString);	
 			fout.close();	
-
-
-
+			
+			
+def multiOperandAddition(url,expected):
+	try:
+		global resultdir
+		global tccount
+		global tcpassed
+		global tcfailed
+		global tcexception
+		
+		fout=open(resultdir,'a');
+		getRequest=urllib2.urlopen(url);
+		respData=getRequest.read();
+		respData=respData.replace(" ","");		
+		respData=respData;
+		respCode=getRequest.getcode();
+		if(respData=="" or respData=="answer" ):
+			if((respCode==200)and respData==expected):
+				resultString=str(url)+":"+"Passed ---- API:"+str(respData)+",Manual:"+str(expected)+",Status code:"+str(respCode)+"\n";
+				print resultString;
+				tcpassed=tcpassed+1;
+				fout.write(resultString);
+				fout.close();
+				return;
+			else:
+				resultString=str(url)+":"+"Failed ---- API:"+str(respData)+",Manual:"+str(expected)+",Status code:"+str(respCode)+"\n";
+				print resultString;
+				tcfailed=tcfailed+1;
+				fout.write(resultString);
+				fout.close();
+				return;
+					
+		difference=float(expected)-float(respData);
+		differencepercentage=(difference/expected)*100;
+		
+		if((respCode==200)and (abs(differencepercentage) < 0.001)):
+			resultString=str(url)+":"+"Passed ---- API:"+str(respData)+",Manual:"+str(expected)+",Status code:"+str(respCode)+"\n";
+			print resultString;
+			tcpassed=tcpassed+1;
+		else:
+			resultString=str(url)+":"+"Failed ---- API:"+str(respData)+",Manual:"+str(expected)+",Status code:"+str(respCode)+"\n";
+			print resultString;
+			tcfailed=tcfailed+1;
+		
+		fout.write(resultString);
+		fout.close();
+	except Exception as e:
+			tcexception=tcexception+1
+			e = sys.exc_info();
+			resultString=str(url)+":"+str(e)+":Failed\n";
+			print resultString;
+			fout.write(resultString);	
+			fout.close();
+			
 tccount=0	
 tcpassed=0
 tcfailed=0
+tcexception=0
 if not os.path.exists(r'c:\Python27\OpenTable\Results'): 
 	os.makedirs(r'c:\Python27\OpenTable\Results')
 
@@ -240,10 +306,7 @@ fout=open(resultdir,"w");
 fout.close();
 #####################################################
 
-
-
-
-
+'''
 ##### Small integer number addition test #####	
 i=0;
 
@@ -535,7 +598,87 @@ for i in range(0,10):
 	tccount=tccount+1;
 	stringAddition(op1,op2,'answer');
 
+'''	
+	
+	
+######## Multioperand Test without string as operand #########
 
+url='https://www.calcatraz.com/calculator/api?c=3.0'
+flag=0;
+opold=3.0;	
+opnew='';
+expected=''
+for i in range(1,30):
+	tccount=tccount+1;
+	for j in range(0,i):
+		choice=random.choice([1,2,3,4,5,6,7])  
+		if(choice==1 or choice==4 or choice==6):
+			no=[+1,-1]	;
+			sign=random.choice(no);
+			opnew=random.randint(1,1000000000)*sign;
+		elif(choice==2 or choice==5 or choice==7):
+			no=[+1,-1]	;
+			sign=random.choice(no);
+			opnew=random.uniform(1,1000000000)*sign;	
+		else:	
+			#opnew=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits +'!@#$%^&*') for _ in range(random.randint(1,10)));
+			opnew=0
+			#flag=1;
+		
+		if(flag==1):
+			#expected='answer'
+			expected=0; 		
+		if(flag!=1):
+			result=opold+opnew;
+			opold=result
+			expected=result;
+		url=url+'%2B'+str(opnew);
+
+	if(expected<=0):
+		expected=''
+	multiOperandAddition(url,expected)
+	
+	
+######## Multioperand Test with string as operand #########
+
+url='https://www.calcatraz.com/calculator/api?c=3.0'
+flag=0;
+opold=3.0;	
+opnew='';
+expected=''
+for i in range(1,30):
+	tccount=tccount+1;
+	for j in range(0,i):
+		choice=random.choice([1,2,3,4,5,6,7])  
+		if(choice==1 or choice==4 or choice==6):
+			no=[+1,-1]	;
+			sign=random.choice(no);
+			opnew=random.randint(1,1000000000)*sign;
+		elif(choice==2 or choice==5 or choice==7):
+			no=[+1,-1]	;
+			sign=random.choice(no);
+			opnew=random.uniform(1,1000000000)*sign;	
+		else:	
+			opnew=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits +'!@#$%^&*') for _ in range(random.randint(1,10)));
+			opnew=0
+			flag=1;
+		
+		if(flag==1):
+			expected='answer'
+	        #expected=0; 		
+		if(flag!=1):
+			result=opold+opnew;
+			opold=result
+			expected=result;
+		url=url+'%2B'+str(opnew);
+
+	if(expected<=0):
+		expected=''
+	multiOperandAddition(url,expected)
+	
+	
+				
+	
 Report();	
 
 
