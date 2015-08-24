@@ -19,10 +19,15 @@ def Report():
 	global tcfailed
 	fout=open(resultdir,'a');
 	fout.write("\n\n*****************************\n");
+	print "\n\n*****************************\n"
 	fout.write("\nTotal Test Cases Executed : "+str(tccount));
+	print "\nTotal Test Cases Executed : "+str(tccount)
 	fout.write("\nTotal Test Cases Passed : "+str(tcpassed));
+	print "\nTotal Test Cases Passed : "+str(tcpassed)
 	fout.write("\nTotal Test Cases Failed : "+str(tcfailed));
+	print "\nTotal Test Cases Failed : "+str(tcfailed)
 	fout.write("\n\n*****************************\n");
+	print "\n\n*****************************\n"
 	fout.close();
 
 
