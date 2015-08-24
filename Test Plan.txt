@@ -1,0 +1,40 @@
+Introduction:
+This Test Plan is to test the https://www.calcatraz.com/calculator/api?c=[number][operator][number] api with respect to addition operation.
+
+Test Type : Function:Testing
+
+Test Case List :
+
+Type 1: Two operands addition test:
+
+1. Small interger test.
+2. Semi large integer test.
+3. Large integer test.
+4. Small floating point number test.
+5. Semi large floating point number test.
+6. Large floating point number test.
+7. Integer and floating point number mixed test.
+8. String as operands test.
+9. String with integer test.
+10. Strings with floating point number test.
+11. Strings containing special characters test.
+12. Negative integer numbers test.
+13. Negative floating point numbers test.
+14. Addition of two 0s test.
+15. Addition of two -0s test.
+16. Addition of integer with 0 test.
+17. Addition of floating point number with 0 test.
+18. Addition of string with 0 test.
+19. Both operands missing test.
+20. Single operand missing test.
+21. Get response status code test.
+
+Type 2: Multi operand test:
+
+1. use the api to perform addtion of multiple operands(int,float and string).
+2. Get response status code test
+
+
+
+
+
